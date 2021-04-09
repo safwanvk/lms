@@ -27,7 +27,8 @@ class MainApp(QMainWindow , ui):
         self.pushButton_3.clicked.connect(self.users_tabs)
         self.pushButton_4.clicked.connect(self.settings_tab)
 
-        self.pushButton_12.clicked.connect(self.add_new_book)
+        self.pushButton_27.clicked.connect(self.add_new_category)
+
 
     #####Open Tabs######
     def day_to_day_tabs(self):
@@ -46,12 +47,7 @@ class MainApp(QMainWindow , ui):
 
     ######Books############
     def add_new_book(self):
-        self.cur = db.cursor()
-
-        self.cur.execute(''' SELECT  * FROM books''')
-        data = self.cur.fetchall()
-
-        print(data)
+        pass
 
     def edit_book(self):
         pass
@@ -71,7 +67,20 @@ class MainApp(QMainWindow , ui):
 
     #####settings#######
     def add_new_category(self):
-        pass
+  
+        category = self.lineEdit_55.text()
+
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            INSERT INTO categories (category) VALUES (%s)
+        ''' , (category,))
+
+        self.db.commit()
+        self.statusBar().showMessage('New Category Addedd ')
+
+        self.lineEdit_55.setText('')
 
     def add_new_author(self):
         pass
