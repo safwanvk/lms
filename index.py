@@ -40,6 +40,8 @@ class MainApp(QMainWindow , ui):
         self.pushButton_28.clicked.connect(self.add_new_author)
         self.pushButton_29.clicked.connect(self.add_new_publisher)
 
+        self.pushButton_12.clicked.connect(self.add_new_book)
+
 
     #####Open Tabs######
     def day_to_day_tabs(self):
@@ -58,8 +60,32 @@ class MainApp(QMainWindow , ui):
     ######Day To Day#######
 
     ######Books############
-    def add_new_book(self):
-        pass
+    def add_new_book(self, index):
+        title = self.lineEdit_20.text()
+        description = self.plainTextEdit_6.toPlainText()
+        code = self.lineEdit_18.text()
+        category = self.comboBox_20.itemData(index)
+        author = self.comboBox_19.itemData(index)
+        publisher = self.comboBox_18.itemData(index)
+        price = self.lineEdit_19.text()
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            INSERT INTO books (title,code,description,category,author,publisher,price) VALUES (%s,%s,%s,%s,%s,%s,%s)
+        ''' , (title,code,description,category,author,publisher,price))
+
+        self.db.commit()
+        self.statusBar().showMessage('New Book Addedd ')
+
+        self.lineEdit_20.setText('')
+        self.plainTextEdit_6.setPlainText('')
+        self.lineEdit_18.setText('')
+        self.comboBox_20.setCurrentIndex(0)
+        self.comboBox_19.setCurrentIndex(0)
+        self.comboBox_18.setCurrentIndex(0)
+        self.lineEdit_19.setText('')
 
     def edit_book(self):
         pass
@@ -207,10 +233,8 @@ class MainApp(QMainWindow , ui):
             self.comboBox_3.clear()
 
             for i in data:
-                self.comboBox_20.setCurrentIndex(i[0])
-                self.comboBox_20.addItem(i[1])
-                self.comboBox_3.setCurrentIndex(i[0])
-                self.comboBox_3.addItem(i[1])
+                self.comboBox_20.addItem(i[1], i[0])
+                self.comboBox_3.addItem(i[1], i[0])
 
     def show_author_combobox(self):
         self.db = db
@@ -225,10 +249,8 @@ class MainApp(QMainWindow , ui):
             self.comboBox_4.clear()
 
             for i in data:
-                self.comboBox_19.setCurrentIndex(i[0])
-                self.comboBox_19.addItem(i[1])
-                self.comboBox_4.setCurrentIndex(i[0])
-                self.comboBox_4.addItem(i[1])
+                self.comboBox_19.addItem(i[1], i[0])
+                self.comboBox_4.addItem(i[1], i[0])
 
     def show_publisher_combobox(self):
         self.db = db
@@ -243,10 +265,8 @@ class MainApp(QMainWindow , ui):
             self.comboBox_5.clear()
 
             for i in data:
-                self.comboBox_18.setCurrentIndex(i[0])
-                self.comboBox_18.addItem(i[1])
-                self.comboBox_5.setCurrentIndex(i[0])
-                self.comboBox_5.addItem(i[1])
+                self.comboBox_18.addItem(i[1], i[0])
+                self.comboBox_5.addItem(i[1], i[0])
 
 
 def main():
