@@ -21,6 +21,8 @@ class MainApp(QMainWindow , ui):
         self.handle_buttons()
         self.tabWidget.tabBar().setVisible(False)
 
+        self.show_books()
+
         self.show_category()
         self.show_author()
         self.show_publisher()
@@ -86,6 +88,31 @@ class MainApp(QMainWindow , ui):
         self.comboBox_19.setCurrentIndex(0)
         self.comboBox_18.setCurrentIndex(0)
         self.lineEdit_19.setText('')
+
+        self.show_books()
+
+    def show_books(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT b.code,b.title,a.author,p.publisher,c.category,b.price from books as b
+            left join authors a on b.author=a.id left join publishers p on b.publisher=p.id
+            left join categories c on b.category=c.id  ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.tableWidget_5.setRowCount(0)
+            self.tableWidget_5.insertRow(0)
+
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.tableWidget_5.setItem(row, column, QTableWidgetItem(str(item)))
+                    column += 1
+
+                    row_pos = self.tableWidget_5.rowCount()
+                    self.tableWidget_2.insertRow(row_pos)
 
     def edit_book(self):
         pass
