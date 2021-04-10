@@ -29,7 +29,7 @@ class MainApp(QMainWindow , ui):
 
         self.pushButton_27.clicked.connect(self.add_new_category)
         self.pushButton_28.clicked.connect(self.add_new_author)
-
+        self.pushButton_29.clicked.connect(self.add_new_publisher)
 
     #####Open Tabs######
     def day_to_day_tabs(self):
@@ -110,7 +110,6 @@ class MainApp(QMainWindow , ui):
     def add_new_author(self):
   
         author = self.lineEdit_58.text()
-        print("b")
 
         self.db = db
         self.cur = self.db.cursor()
@@ -148,7 +147,21 @@ class MainApp(QMainWindow , ui):
 
 
     def add_new_publisher(self):
-        pass
+
+        publisher = self.lineEdit_59.text()
+
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            INSERT INTO publishers (publisher) VALUES (%s)
+        ''' , (publisher,))
+
+        self.db.commit()
+        self.statusBar().showMessage('New Publisher Addedd ')
+
+        self.lineEdit_59.setText('')
+
 
 def main():
     app = QApplication(sys.argv)
