@@ -81,6 +81,29 @@ class MainApp(QMainWindow , ui):
         self.statusBar().showMessage('New Category Addedd ')
 
         self.lineEdit_55.setText('')
+        self.show_category()
+
+    def show_category(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT category from categories ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.tableWidget_2.setRowCount(0)
+            self.tableWidget_2.insertRow(0)
+
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.tableWidget_2.setItem(row, column, QTableWidgetItem(str(item)))
+                    column += 1
+
+                    row_pos = self.tableWidget_2.rowCount()
+                    self.tableWidget_2.insertRow(row_pos)
+
 
     def add_new_author(self):
         pass
