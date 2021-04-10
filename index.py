@@ -161,6 +161,29 @@ class MainApp(QMainWindow , ui):
         self.statusBar().showMessage('New Publisher Addedd ')
 
         self.lineEdit_59.setText('')
+        self.show_publisher()
+
+    def show_publisher(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT publisher from publishers ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.tableWidget_4.setRowCount(0)
+            self.tableWidget_4.insertRow(0)
+
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.tableWidget_4.setItem(row, column, QTableWidgetItem(str(item)))
+                    column += 1
+
+                    row_pos = self.tableWidget_4.rowCount()
+                    self.tableWidget_4.insertRow(row_pos)
+
 
 
 def main():
