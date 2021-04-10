@@ -26,6 +26,7 @@ class MainApp(QMainWindow , ui):
         self.show_publisher()
 
         self.show_category_combobox()
+        self.show_author_combobox()
 
         
     def handle_buttons(self):
@@ -209,6 +210,24 @@ class MainApp(QMainWindow , ui):
                 self.comboBox_20.addItem(i[1])
                 self.comboBox_3.setCurrentIndex(i[0])
                 self.comboBox_3.addItem(i[1])
+
+    def show_author_combobox(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT id, author from authors ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.comboBox_4.clear()
+
+            for i in data:
+                self.comboBox_19.setCurrentIndex(i[0])
+                self.comboBox_19.addItem(i[1])
+                self.comboBox_4.setCurrentIndex(i[0])
+                self.comboBox_4.addItem(i[1])
 
 
 def main():
