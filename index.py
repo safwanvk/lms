@@ -20,6 +20,7 @@ class MainApp(QMainWindow , ui):
         self.setupUi(self)
         self.handle_buttons()
         self.tabWidget.tabBar().setVisible(False)
+
         
     def handle_buttons(self):
         self.pushButton.clicked.connect(self.day_to_day_tabs)
@@ -30,6 +31,7 @@ class MainApp(QMainWindow , ui):
         self.pushButton_27.clicked.connect(self.add_new_category)
         self.pushButton_28.clicked.connect(self.add_new_author)
         self.pushButton_29.clicked.connect(self.add_new_publisher)
+
 
     #####Open Tabs######
     def day_to_day_tabs(self):
@@ -43,6 +45,9 @@ class MainApp(QMainWindow , ui):
 
     def settings_tab(self):
         self.tabWidget.setCurrentIndex(3)
+        self.show_category()
+        self.show_author()
+        self.show_publisher()
 
 
     ######Day To Day#######
