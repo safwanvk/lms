@@ -44,6 +44,7 @@ class MainApp(QMainWindow , ui):
     def settings_tab(self):
         self.tabWidget.setCurrentIndex(3)
 
+
     ######Day To Day#######
 
     ######Books############
@@ -122,6 +123,29 @@ class MainApp(QMainWindow , ui):
         self.statusBar().showMessage('New Author Addedd ')
 
         self.lineEdit_58.setText('')
+        self.show_author()
+
+    def show_author(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT author from authors ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.tableWidget_3.setRowCount(0)
+            self.tableWidget_3.insertRow(0)
+
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.tableWidget_3.setItem(row, column, QTableWidgetItem(str(item)))
+                    column += 1
+
+                    row_pos = self.tableWidget_3.rowCount()
+                    self.tableWidget_3.insertRow(row_pos)
+
 
     def add_new_publisher(self):
         pass
