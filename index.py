@@ -28,6 +28,7 @@ class MainApp(QMainWindow , ui):
         self.pushButton_4.clicked.connect(self.settings_tab)
 
         self.pushButton_27.clicked.connect(self.add_new_category)
+        self.pushButton_28.clicked.connect(self.add_new_author)
 
 
     #####Open Tabs######
@@ -106,7 +107,21 @@ class MainApp(QMainWindow , ui):
 
 
     def add_new_author(self):
-        pass
+  
+        author = self.lineEdit_58.text()
+        print("b")
+
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            INSERT INTO authors (author) VALUES (%s)
+        ''' , (author,))
+
+        self.db.commit()
+        self.statusBar().showMessage('New Author Addedd ')
+
+        self.lineEdit_58.setText('')
 
     def add_new_publisher(self):
         pass
