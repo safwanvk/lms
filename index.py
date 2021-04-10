@@ -21,6 +21,12 @@ class MainApp(QMainWindow , ui):
         self.handle_buttons()
         self.tabWidget.tabBar().setVisible(False)
 
+        self.show_category()
+        self.show_author()
+        self.show_publisher()
+
+        self.show_category_combobox()
+
         
     def handle_buttons(self):
         self.pushButton.clicked.connect(self.day_to_day_tabs)
@@ -45,9 +51,6 @@ class MainApp(QMainWindow , ui):
 
     def settings_tab(self):
         self.tabWidget.setCurrentIndex(3)
-        self.show_category()
-        self.show_author()
-        self.show_publisher()
 
 
     ######Day To Day#######
@@ -189,6 +192,23 @@ class MainApp(QMainWindow , ui):
                     row_pos = self.tableWidget_4.rowCount()
                     self.tableWidget_4.insertRow(row_pos)
 
+    def show_category_combobox(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT id, category from categories ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.comboBox_3.clear()
+
+            for i in data:
+                self.comboBox_20.setCurrentIndex(i[0])
+                self.comboBox_20.addItem(i[1])
+                self.comboBox_3.setCurrentIndex(i[0])
+                self.comboBox_3.addItem(i[1])
 
 
 def main():
