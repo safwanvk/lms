@@ -312,7 +312,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_6">
        <attribute name="title">
@@ -685,16 +685,6 @@
          <string>Book Publisher</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit_15">
-        <property name="geometry">
-         <rect>
-          <x>120</x>
-          <y>80</y>
-          <width>241</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
        <widget class="QLabel" name="label_27">
         <property name="geometry">
          <rect>
@@ -732,6 +722,16 @@
         </property>
         <property name="text">
          <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox_6">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>80</y>
+          <width>241</width>
+          <height>31</height>
+         </rect>
         </property>
        </widget>
       </widget>

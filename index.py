@@ -27,6 +27,8 @@ class MainApp(QMainWindow , ui):
         self.show_author()
         self.show_publisher()
 
+        self.show_title_combobox()
+
         self.show_category_combobox()
         self.show_author_combobox()
         self.show_publisher_combobox()
@@ -43,6 +45,7 @@ class MainApp(QMainWindow , ui):
         self.pushButton_29.clicked.connect(self.add_new_publisher)
 
         self.pushButton_12.clicked.connect(self.add_new_book)
+        self.pushButton_11.clicked.connect(self.search_book)
 
 
     #####Open Tabs######
@@ -113,6 +116,38 @@ class MainApp(QMainWindow , ui):
 
                     row_pos = self.tableWidget_5.rowCount()
                     self.tableWidget_2.insertRow(row_pos)
+
+    def search_book(self, index):
+
+        print("ch")
+
+        id = self.comboBox_20.itemData(index)
+        print(id)
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        sql = ''' SELECT b.code,b.title,b.author,a.author as author_name,b.publisher,p.publisher as publisher_name,
+            b.category,c.category as category_name,b.price,b.description from books as b
+            left join authors a on b.author=a.id left join publishers p on b.publisher=p.id
+            left join categories c on b.category=c.id where b.id=%s '''
+        self.cur.execute(sql , [(id)])
+
+        data = self.cur.fetchall()
+
+        print("fgd")
+
+
+        print(data)
+
+        self.lineEdit_5.setText(data[0])
+        self.lineEdit_3.setText(data[1])
+        self.comboBox_4.addItem(data[3], data[2])
+        self.comboBox_5.addItem(data[5], data[4])
+        self.comboBox_3.addItem(data[7], data[6])
+        self.lineEdit_19.setText(data[8])
+        self.plainTextEdit_6.setPlainText(data[9])
+
 
     def edit_book(self):
         pass
@@ -294,6 +329,21 @@ class MainApp(QMainWindow , ui):
             for i in data:
                 self.comboBox_18.addItem(i[1], i[0])
                 self.comboBox_5.addItem(i[1], i[0])
+
+    def show_title_combobox(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT id, title from books ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+
+            for i in data:
+                print(i)
+                self.comboBox_6.addItem(i[1], i[0])
 
 
 def main():
