@@ -20,6 +20,9 @@ class MainApp(QMainWindow , ui):
         self.setupUi(self)
         self.handle_buttons()
         self.tabWidget.tabBar().setVisible(False)
+        style = open('dark.css' , 'r')
+        style = style.read()
+        self.setStyleSheet(style)
 
         self.show_books()
 
