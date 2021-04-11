@@ -46,6 +46,7 @@ class MainApp(QMainWindow , ui):
 
         self.pushButton_12.clicked.connect(self.add_new_book)
         self.pushButton_11.clicked.connect(self.search_book)
+        self.pushButton_7.clicked.connect(self.edit_book)
 
 
     #####Open Tabs######
@@ -145,7 +146,37 @@ class MainApp(QMainWindow , ui):
 
 
     def edit_book(self):
-        pass
+        id = self.comboBox_6.currentData()
+        title = self.lineEdit_3.text()
+        description = self.plainTextEdit.toPlainText()
+        code = self.lineEdit_5.text()
+        category = self.comboBox_3.currentData()
+        author = self.comboBox_4.currentData()
+        publisher = self.comboBox_5.currentData()
+        price = self.lineEdit_6.text()
+
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            update books set title=%s,code=%s,description=%s,category=%s,author=%s,publisher=%s,price=%s where id=%s
+            ''' , (title,code,description,category,author,publisher,price,id))
+
+        self.db.commit()
+        self.statusBar().showMessage('Book Updated')
+
+        id = self.comboBox_6.setCurrentIndex(0)
+        title = self.lineEdit_3.setText('')
+        description = self.plainTextEdit.setPlainText('')
+        code = self.lineEdit_5.setText('')
+        category = self.comboBox_3.setCurrentIndex(0)
+        author = self.comboBox_4.setCurrentIndex(0)
+        publisher = self.comboBox_5.setCurrentIndex(0)
+        price = self.lineEdit_6.setText('')
+
+        self.show_books()
+        self.show_title_combobox()
 
     def delete_book(self):
         pass
