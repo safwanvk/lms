@@ -65,14 +65,15 @@ class MainApp(QMainWindow , ui):
     ######Day To Day#######
 
     ######Books############
-    def add_new_book(self, index):
+    def add_new_book(self):
         title = self.lineEdit_20.text()
         description = self.plainTextEdit_6.toPlainText()
         code = self.lineEdit_18.text()
-        category = self.comboBox_20.itemData(index)
-        author = self.comboBox_19.itemData(index)
-        publisher = self.comboBox_18.itemData(index)
+        category = self.comboBox_20.currentData()
+        author = self.comboBox_19.currentData()
+        publisher = self.comboBox_18.currentData()
         price = self.lineEdit_19.text()
+
         
         self.db = db
         self.cur = self.db.cursor()
@@ -115,14 +116,10 @@ class MainApp(QMainWindow , ui):
                     column += 1
 
                     row_pos = self.tableWidget_5.rowCount()
-                    self.tableWidget_2.insertRow(row_pos)
+                    self.tableWidget_5.insertRow(row_pos)
 
-    def search_book(self, index):
-
-        print("ch")
-
-        id = self.comboBox_20.itemData(index)
-        print(id)
+    def search_book(self):
+        id = self.comboBox_6.currentData()
         
         self.db = db
         self.cur = self.db.cursor()
@@ -134,19 +131,17 @@ class MainApp(QMainWindow , ui):
         self.cur.execute(sql , [(id)])
 
         data = self.cur.fetchall()
-
-        print("fgd")
-
-
-        print(data)
-
-        self.lineEdit_5.setText(data[0])
-        self.lineEdit_3.setText(data[1])
-        self.comboBox_4.addItem(data[3], data[2])
-        self.comboBox_5.addItem(data[5], data[4])
-        self.comboBox_3.addItem(data[7], data[6])
-        self.lineEdit_19.setText(data[8])
-        self.plainTextEdit_6.setPlainText(data[9])
+ 
+        if data:
+            self.lineEdit_5.setText(data[0][0])
+            self.lineEdit_3.setText(data[0][1])
+            self.comboBox_4.setCurrentText(data[0][3])
+            self.comboBox_5.setCurrentText(data[0][5])
+            self.comboBox_3.setCurrentText(data[0][7])
+            self.lineEdit_6.setText(str(data[0][8]))
+            self.plainTextEdit.setPlainText(data[0][9])
+        else:
+            self.statusBar().showMessage('No Book')
 
 
     def edit_book(self):
@@ -342,7 +337,6 @@ class MainApp(QMainWindow , ui):
         if data:
 
             for i in data:
-                print(i)
                 self.comboBox_6.addItem(i[1], i[0])
 
 
