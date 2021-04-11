@@ -47,6 +47,7 @@ class MainApp(QMainWindow , ui):
         self.pushButton_12.clicked.connect(self.add_new_book)
         self.pushButton_11.clicked.connect(self.search_book)
         self.pushButton_7.clicked.connect(self.edit_book)
+        self.pushButton_8.clicked.connect(self.delete_book)
 
 
     #####Open Tabs######
@@ -146,6 +147,7 @@ class MainApp(QMainWindow , ui):
 
 
     def edit_book(self):
+
         id = self.comboBox_6.currentData()
         title = self.lineEdit_3.text()
         description = self.plainTextEdit.toPlainText()
@@ -166,20 +168,45 @@ class MainApp(QMainWindow , ui):
         self.db.commit()
         self.statusBar().showMessage('Book Updated')
 
-        id = self.comboBox_6.setCurrentIndex(0)
-        title = self.lineEdit_3.setText('')
-        description = self.plainTextEdit.setPlainText('')
-        code = self.lineEdit_5.setText('')
-        category = self.comboBox_3.setCurrentIndex(0)
-        author = self.comboBox_4.setCurrentIndex(0)
-        publisher = self.comboBox_5.setCurrentIndex(0)
-        price = self.lineEdit_6.setText('')
+        self.comboBox_6.setCurrentIndex(0)
+        self.lineEdit_3.setText('')
+        self.plainTextEdit.setPlainText('')
+        self.lineEdit_5.setText('')
+        self.comboBox_3.setCurrentIndex(0)
+        self.comboBox_4.setCurrentIndex(0)
+        self.comboBox_5.setCurrentIndex(0)
+        self.lineEdit_6.setText('')
 
         self.show_books()
         self.show_title_combobox()
 
     def delete_book(self):
-        pass
+        id = self.comboBox_6.currentData()
+
+        warning = QMessageBox.warning(self , 'Delete Book' , "Are you sure you want to delete this book" , 
+        QMessageBox.Yes | QMessageBox.No)
+        if warning == QMessageBox.Yes :
+            self.db = db
+            self.cur = self.db.cursor()
+
+            sql = ''' DELETE from books where id=%s '''
+            self.cur.execute(sql , [(id)])
+            self.db.commit()
+            self.statusBar().showMessage('Book Deleted')
+
+            self.comboBox_6.setCurrentIndex(0)
+            self.lineEdit_3.setText('')
+            self.plainTextEdit.setPlainText('')
+            self.lineEdit_5.setText('')
+            self.comboBox_3.setCurrentIndex(0)
+            self.comboBox_4.setCurrentIndex(0)
+            self.comboBox_5.setCurrentIndex(0)
+            self.lineEdit_6.setText('')
+
+            self.show_books()
+            self.show_title_combobox()
+
+
 
     ######Users##########
     def add_new_user(self):
@@ -366,6 +393,7 @@ class MainApp(QMainWindow , ui):
         data = self.cur.fetchall()
 
         if data:
+            self.comboBox_6.clear()
 
             for i in data:
                 self.comboBox_6.addItem(i[1], i[0])
