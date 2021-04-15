@@ -57,6 +57,7 @@ class MainApp(QMainWindow , ui):
 
         self.pushButton_14.clicked.connect(self.add_new_client)
         self.pushButton_16.clicked.connect(self.search_client)
+        self.pushButton_26.clicked.connect(self.edit_client)
 
 
     #####Open Tabs######
@@ -269,6 +270,35 @@ class MainApp(QMainWindow , ui):
             self.lineEdit_56.setText(str(data[0][2]))
         else:
             self.statusBar().showMessage('No Client')
+
+    def edit_client(self):
+
+        print("jhxcb")
+        id = self.comboBox_7.currentData()
+
+        name = self.lineEdit_31.text()
+        email = self.lineEdit_36.text()
+        national_id = self.lineEdit_56.text()
+
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        print(name,email,type(national_id))
+
+        self.cur.execute('''
+            update clients set name=%s,email=%s,national_id=%s where id=%s
+            ''' , (name,email,national_id,id))
+
+        self.db.commit()
+        self.statusBar().showMessage('Client Updated')
+
+        self.comboBox_7.setCurrentIndex(0)
+        self.lineEdit_31.setText('')
+        self.lineEdit_36.setText('')
+        self.lineEdit_56.setText('')
+
+        self.show_client_combobox()
 
 
     #####settings#######
