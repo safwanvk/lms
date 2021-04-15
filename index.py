@@ -56,6 +56,7 @@ class MainApp(QMainWindow , ui):
         self.pushButton_8.clicked.connect(self.delete_book)
 
         self.pushButton_14.clicked.connect(self.add_new_client)
+        self.pushButton_16.clicked.connect(self.search_client)
 
 
     #####Open Tabs######
@@ -250,6 +251,24 @@ class MainApp(QMainWindow , ui):
         self.lineEdit_2.setText('')
         self.lineEdit_16.setText('')
         self.lineEdit_17.setText('')
+
+    def search_client(self):
+        id = self.comboBox_7.currentData()
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        sql = ''' SELECT name,email,national_id from clients where id=%s '''
+        self.cur.execute(sql , [(id)])
+
+        data = self.cur.fetchall()
+ 
+        if data:
+            self.lineEdit_31.setText(data[0][0])
+            self.lineEdit_36.setText(data[0][1])
+            self.lineEdit_56.setText(str(data[0][2]))
+        else:
+            self.statusBar().showMessage('No Client')
 
 
     #####settings#######

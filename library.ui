@@ -2466,7 +2466,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Edit Client</string>
+        <string>Save Client</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_38">
