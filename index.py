@@ -42,6 +42,7 @@ class MainApp(QMainWindow , ui):
         self.pushButton_2.clicked.connect(self.books_tabs)
         self.pushButton_3.clicked.connect(self.users_tabs)
         self.pushButton_4.clicked.connect(self.settings_tab)
+        self.pushButton_5.clicked.connect(self.client_tabs)
 
         self.pushButton_27.clicked.connect(self.add_new_category)
         self.pushButton_28.clicked.connect(self.add_new_author)
@@ -51,6 +52,8 @@ class MainApp(QMainWindow , ui):
         self.pushButton_11.clicked.connect(self.search_book)
         self.pushButton_7.clicked.connect(self.edit_book)
         self.pushButton_8.clicked.connect(self.delete_book)
+
+        self.pushButton_14.clicked.connect(self.add_new_client)
 
 
     #####Open Tabs######
@@ -63,8 +66,11 @@ class MainApp(QMainWindow , ui):
     def users_tabs(self):
         self.tabWidget.setCurrentIndex(2)
 
-    def settings_tab(self):
+    def client_tabs(self):
         self.tabWidget.setCurrentIndex(3)
+
+    def settings_tab(self):
+        self.tabWidget.setCurrentIndex(4)
 
 
     ######Day To Day#######
@@ -220,6 +226,29 @@ class MainApp(QMainWindow , ui):
 
     def user_login(self):
         pass
+
+    #######Client########
+    def add_new_client(self):
+        name = self.lineEdit_2.text()
+        email = self.lineEdit_16.text()
+        national_id = self.lineEdit_17.text()
+
+
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            INSERT INTO clients(name,email,national_id) VALUES (%s,%s,%s)
+        ''' , (name,email,national_id))
+
+        self.db.commit()
+        self.statusBar().showMessage('New Client Addedd ')
+
+        self.lineEdit_2.setText('')
+        self.lineEdit_16.setText('')
+        self.lineEdit_17.setText('')
+
 
     #####settings#######
     def add_new_category(self):
