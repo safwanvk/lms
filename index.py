@@ -58,6 +58,9 @@ class MainApp(QMainWindow , ui):
         self.pushButton_14.clicked.connect(self.add_new_client)
         self.pushButton_16.clicked.connect(self.search_client)
         self.pushButton_26.clicked.connect(self.edit_client)
+        self.pushButton_38.clicked.connect(self.delete_client)
+
+        self.pushButton_18.clicked.connect(self.add_new_user)
 
 
     #####Open Tabs######
@@ -223,7 +226,28 @@ class MainApp(QMainWindow , ui):
 
     ######Users##########
     def add_new_user(self):
-        pass
+        user_name = self.lineEdit_9.text()
+        email = self.lineEdit_25.text()
+        password = self.lineEdit_26.text()
+        password1 = self.lineEdit_27.text()
+
+        if password == password1:
+            self.db = db
+            self.cur = self.db.cursor()
+
+            self.cur.execute('''
+                INSERT INTO users(username,email,password) VALUES (%s,%s,%s)
+            ''' , (user_name,email,password))
+
+            self.db.commit()
+            self.statusBar().showMessage('New User Addedd')
+            
+            self.lineEdit_9.setText('')
+            self.lineEdit_25.setText('')
+            self.lineEdit_26.setText('')
+            self.lineEdit_27.setText('')
+        else:
+            self.statusBar().showMessage('Please add a valid password twice')
 
     def edit_user(self):
         pass
@@ -272,8 +296,6 @@ class MainApp(QMainWindow , ui):
             self.statusBar().showMessage('No Client')
 
     def edit_client(self):
-
-        print("jhxcb")
         id = self.comboBox_7.currentData()
 
         name = self.lineEdit_31.text()
@@ -300,6 +322,26 @@ class MainApp(QMainWindow , ui):
 
         self.show_client_combobox()
 
+    def delete_client(self):
+        id = self.comboBox_7.currentData()
+
+        warning = QMessageBox.warning(self , 'Delete Client' , "Are you sure you want to delete this client" , 
+        QMessageBox.Yes | QMessageBox.No)
+        if warning == QMessageBox.Yes :
+            self.db = db
+            self.cur = self.db.cursor()
+
+            sql = ''' DELETE from clients where id=%s '''
+            self.cur.execute(sql , [(id)])
+            self.db.commit()
+            self.statusBar().showMessage('Client Deleted')
+
+            self.comboBox_7.setCurrentIndex(0)
+            self.lineEdit_31.setText('')
+            self.lineEdit_36.setText('')
+            self.lineEdit_56.setText('')
+
+            self.show_client_combobox()
 
     #####settings#######
     def add_new_category(self):
