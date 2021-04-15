@@ -61,6 +61,7 @@ class MainApp(QMainWindow , ui):
         self.pushButton_38.clicked.connect(self.delete_client)
 
         self.pushButton_18.clicked.connect(self.add_new_user)
+        self.pushButton_20.clicked.connect(self.login)
 
 
     #####Open Tabs######
@@ -248,6 +249,29 @@ class MainApp(QMainWindow , ui):
             self.lineEdit_27.setText('')
         else:
             self.statusBar().showMessage('Please add a valid password twice')
+
+    def login(self):
+        user_name = self.lineEdit_34.text()
+        password = self.lineEdit_35.text()
+
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        sql = ''' SELECT * from users'''
+        self.cur.execute(sql)
+
+        data = self.cur.fetchall()
+
+        for i in data:
+            if user_name == i[1] and password == i[3]:
+                self.statusBar().showMessage('Valid Username & Password')
+
+                self.lineEdit_40.setText(i[1])
+                self.lineEdit_61.setText(i[2])
+                self.lineEdit_82.setText(i[3])
+
+    
 
     def edit_user(self):
         pass
