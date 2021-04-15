@@ -36,6 +36,8 @@ class MainApp(QMainWindow , ui):
         self.show_author_combobox()
         self.show_publisher_combobox()
 
+        self.show_client_combobox()
+
         
     def handle_buttons(self):
         self.pushButton.clicked.connect(self.day_to_day_tabs)
@@ -429,6 +431,21 @@ class MainApp(QMainWindow , ui):
 
             for i in data:
                 self.comboBox_6.addItem(i[1], i[0])
+
+    def show_client_combobox(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT id, name from clients ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.comboBox_7.clear()
+
+            for i in data:
+                self.comboBox_7.addItem(i[1], i[0])
 
 
 def main():
