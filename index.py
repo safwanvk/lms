@@ -62,6 +62,7 @@ class MainApp(QMainWindow , ui):
 
         self.pushButton_18.clicked.connect(self.add_new_user)
         self.pushButton_20.clicked.connect(self.login)
+        self.pushButton_37.clicked.connect(self.edit_user)
 
 
     #####Open Tabs######
@@ -270,14 +271,37 @@ class MainApp(QMainWindow , ui):
                 self.lineEdit_40.setText(i[1])
                 self.lineEdit_61.setText(i[2])
                 self.lineEdit_82.setText(i[3])
+            else:
+                self.statusBar().showMessage('No Valid Username & Password')
 
     
 
     def edit_user(self):
-        pass
+        original_username = self.lineEdit_34.text()
 
-    def user_login(self):
-        pass
+        user_name = self.lineEdit_40.text()
+        email = self.lineEdit_61.text()
+        password = self.lineEdit_82.text()
+        password1 = self.lineEdit_83.text()
+
+        if password == password1:
+        
+            self.db = db
+            self.cur = self.db.cursor()
+
+            self.cur.execute('''
+                update users set username=%s,email=%s,password=%s where username=%s
+                ''' , (user_name,email,password,original_username))
+
+            self.db.commit()
+            self.statusBar().showMessage('User Updated')
+
+            self.lineEdit_34.setText('')
+            self.lineEdit_35.setText('')
+            self.lineEdit_40.setText('')
+            self.lineEdit_61.setText('')
+            self.lineEdit_82.setText('')
+            self.lineEdit_83.setText('')
 
     #######Client########
     def add_new_client(self):
