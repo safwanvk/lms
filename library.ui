@@ -74,7 +74,7 @@
     </property>
     <property name="icon">
      <iconset resource="icons.qrc">
-      <normaloff>:/icons/users.png</normaloff>:/icons/users.png</iconset>
+      <normaloff>:/icons/admin.png</normaloff>:/icons/admin.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -2727,7 +2727,7 @@
     </property>
     <property name="icon">
      <iconset resource="icons.qrc">
-      <normaloff>:/icons/books.png</normaloff>:/icons/books.png</iconset>
+      <normaloff>:/icons/users.png</normaloff>:/icons/users.png</iconset>
     </property>
     <property name="iconSize">
      <size>
