@@ -255,7 +255,7 @@
       </property>
       <column>
        <property name="text">
-        <string>Book Code</string>
+        <string>Client Name</string>
        </property>
       </column>
       <column>
@@ -265,22 +265,22 @@
       </column>
       <column>
        <property name="text">
-        <string>Book Author</string>
+        <string>Type</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Book Publisher</string>
+        <string>Days</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Book Category</string>
+        <string>Buy Date</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Book Price</string>
+        <string>Expire Date</string>
        </property>
       </column>
      </widget>
