@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 import mysql.connector
 import sys
 from PyQt5.uic import loadUiType
+import datetime
 
 db = mysql.connector.connect(
   host="localhost",
@@ -30,6 +31,8 @@ class MainApp(QMainWindow , ui):
         self.show_author()
         self.show_publisher()
 
+        self.show_client()
+
         self.show_title_combobox()
 
         self.show_category_combobox()
@@ -37,6 +40,7 @@ class MainApp(QMainWindow , ui):
         self.show_publisher_combobox()
 
         self.show_client_combobox()
+        self.show_book_combobox()
 
         
     def handle_buttons(self):
@@ -45,6 +49,8 @@ class MainApp(QMainWindow , ui):
         self.pushButton_3.clicked.connect(self.users_tabs)
         self.pushButton_4.clicked.connect(self.settings_tab)
         self.pushButton_5.clicked.connect(self.client_tabs)
+
+        self.pushButton_6.clicked.connect(self.day_operation)
 
         self.pushButton_27.clicked.connect(self.add_new_category)
         self.pushButton_28.clicked.connect(self.add_new_author)
@@ -83,6 +89,32 @@ class MainApp(QMainWindow , ui):
 
 
     ######Day To Day#######
+    def day_operation(self):
+        client_id = self.comboBox_22.currentData()
+        book_id = self.comboBox_21.currentData()
+        type = self.comboBox.currentText()
+        day = self.comboBox_2.currentIndex() + 1
+        today =  datetime.date.today()
+        to_date = today + datetime.timedelta(days=day)
+
+
+        
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            INSERT INTO day_operations(client_id,book_id,type,days,date,to_date) VALUES (%s,%s,%s,%s,%s,%s)
+        ''' , (client_id,book_id,type,day,today,to_date))
+
+        self.db.commit()
+        self.statusBar().showMessage('Day operation Addedd')
+
+        self.comboBox_22.setCurrentIndex(0)
+        self.comboBox_21.setCurrentIndex(0)
+        self.comboBox.setCurrentIndex(0)
+        self.comboBox_2.setCurrentIndex(0)
+
+
 
     ######Books############
     def add_new_book(self):
@@ -114,6 +146,7 @@ class MainApp(QMainWindow , ui):
         self.lineEdit_19.setText('')
 
         self.show_books()
+        self.show_title_combobox()
 
     def show_books(self):
         self.db = db
@@ -325,6 +358,8 @@ class MainApp(QMainWindow , ui):
         self.lineEdit_16.setText('')
         self.lineEdit_17.setText('')
 
+        self.show_client()
+
     def search_client(self):
         id = self.comboBox_7.currentData()
         
@@ -342,6 +377,27 @@ class MainApp(QMainWindow , ui):
             self.lineEdit_56.setText(str(data[0][2]))
         else:
             self.statusBar().showMessage('No Client')
+
+    def show_client(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT name,email,national_id from clients''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.tableWidget_6.setRowCount(0)
+            self.tableWidget_6.insertRow(0)
+
+            for row, form in enumerate(data):
+                for column, item in enumerate(form):
+                    self.tableWidget_6.setItem(row, column, QTableWidgetItem(str(item)))
+                    column += 1
+
+                    row_pos = self.tableWidget_6.rowCount()
+                    self.tableWidget_6.insertRow(row_pos)
 
     def edit_client(self):
         id = self.comboBox_7.currentData()
@@ -369,6 +425,7 @@ class MainApp(QMainWindow , ui):
         self.lineEdit_56.setText('')
 
         self.show_client_combobox()
+        self.show_client()
 
     def delete_client(self):
         id = self.comboBox_7.currentData()
@@ -567,9 +624,11 @@ class MainApp(QMainWindow , ui):
 
         if data:
             self.comboBox_6.clear()
+            self.comboBox_21.clear()
 
             for i in data:
                 self.comboBox_6.addItem(i[1], i[0])
+                self.comboBox_21.addItem(i[1], i[0])
 
     def show_client_combobox(self):
         self.db = db
@@ -582,9 +641,26 @@ class MainApp(QMainWindow , ui):
 
         if data:
             self.comboBox_7.clear()
+            self.comboBox_22.clear()
 
             for i in data:
                 self.comboBox_7.addItem(i[1], i[0])
+                self.comboBox_22.addItem(i[1], i[0])
+
+    def show_book_combobox(self):
+        self.db = db
+        self.cur = self.db.cursor()
+
+        self.cur.execute('''
+            SELECT id, title from books ''')
+
+        data = self.cur.fetchall()
+
+        if data:
+            self.comboBox_21.clear()
+
+            for i in data:
+                self.comboBox_21.addItem(i[1], i[0])
 
 
 def main():
