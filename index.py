@@ -5,13 +5,17 @@ import mysql.connector
 import sys
 from PyQt5.uic import loadUiType
 import datetime
+import os
 
-db = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="1234",
-  database="lms"
-)
+os.system('python3 connection.py')
+
+
+# db = mysql.connector.connect(
+#   host="localhost",
+#   user="root",
+#   password="1234",
+#   database="lms"
+# )
 
 ui,_ = loadUiType('library.ui')
 
