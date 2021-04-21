@@ -7,15 +7,11 @@ from PyQt5.uic import loadUiType
 import datetime
 import os
 
+import sqlite3 as sql
+
 os.system('python3 connection.py')
+os.system('python3 create_tables.py')
 
-
-# db = mysql.connector.connect(
-#   host="localhost",
-#   user="root",
-#   password="1234",
-#   database="lms"
-# )
 
 ui,_ = loadUiType('library.ui')
 
@@ -105,7 +101,7 @@ class MainApp(QMainWindow , ui):
 
 
         
-        self.db = db
+        self.db = sql.connect("library.db")
         self.cur = self.db.cursor()
 
         self.cur.execute('''
