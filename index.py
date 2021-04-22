@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import mysql.connector
+# import mysql.connector
 import sys
 from PyQt5.uic import loadUiType
 import datetime
@@ -14,6 +14,7 @@ os.system('python3 create_tables.py')
 
 
 ui,_ = loadUiType('library.ui')
+db = sql.connect("library.db")
 
 class MainApp(QMainWindow , ui):
     def __init__(self):
@@ -101,16 +102,15 @@ class MainApp(QMainWindow , ui):
             today =  datetime.date.today()
             to_date = today + datetime.timedelta(days=day)
             
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
-                INSERT INTO day_operations(client_id,book_id,type,days,date,to_date) VALUES (%s,%s,%s,%s,%s,%s)
+                INSERT INTO day_operations(client_id,book_id,type,days,date,to_date) VALUES (?,?,?,?,?,?)
             ''' , (client_id,book_id,type,day,today,to_date))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
             self.statusBar().showMessage('New operation Addedd')
 
             self.comboBox_22.setCurrentIndex(0)
@@ -125,7 +125,7 @@ class MainApp(QMainWindow , ui):
 
     def show_operations(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -135,7 +135,6 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
 
             if data:
                 self.tableWidget.setRowCount(0)
@@ -168,16 +167,15 @@ class MainApp(QMainWindow , ui):
             price = self.lineEdit_19.text()
 
         
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
-                INSERT INTO books (title,code,description,category,author,publisher,price) VALUES (%s,%s,%s,%s,%s,%s,%s)
+                INSERT INTO books (title,code,description,category,author,publisher,price) VALUES (?,?,?,?,?,?,?)
             ''' , (title,code,description,category,author,publisher,price))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
             self.statusBar().showMessage('New Book Addedd ')
 
             self.lineEdit_20.setText('')
@@ -197,7 +195,7 @@ class MainApp(QMainWindow , ui):
 
     def show_books(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -207,7 +205,6 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
 
             if data:
                 self.tableWidget_5.setRowCount(0)
@@ -221,25 +218,25 @@ class MainApp(QMainWindow , ui):
                         row_pos = self.tableWidget_5.rowCount()
                         self.tableWidget_5.insertRow(row_pos)
 
-        except Exception:
+        except Exception as e:
+            print(e)
             self.statusBar().showMessage('Could not show book.')
 
     def search_book(self):
         try:
             id = self.comboBox_6.currentData()
             
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             sql = ''' SELECT b.code,b.title,b.author,a.author as author_name,b.publisher,p.publisher as publisher_name,
                 b.category,c.category as category_name,b.price,b.description from books as b
                 left join authors a on b.author=a.id left join publishers p on b.publisher=p.id
-                left join categories c on b.category=c.id where b.id=%s '''
+                left join categories c on b.category=c.id where b.id=? '''
             self.cur.execute(sql , [(id)])
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
     
             if data:
                 self.lineEdit_5.setText(data[0][0])
@@ -268,16 +265,15 @@ class MainApp(QMainWindow , ui):
             price = self.lineEdit_6.text()
 
             
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
-                update books set title=%s,code=%s,description=%s,category=%s,author=%s,publisher=%s,price=%s where id=%s
+                update books set title=?,code=?,description=?,category=?,author=?,publisher=?,price=? where id=?
                 ''' , (title,code,description,category,author,publisher,price,id))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
             self.statusBar().showMessage('Book Updated')
 
             self.comboBox_6.setCurrentIndex(0)
@@ -302,14 +298,13 @@ class MainApp(QMainWindow , ui):
             QMessageBox.Yes | QMessageBox.No)
             if warning == QMessageBox.Yes :
 
-                self.db = sql.connect("library.db")
+                self.db = db
                 self.cur = self.db.cursor()
 
-                sql = ''' DELETE from books where id=%s '''
+                sql = ''' DELETE from books where id=? '''
                 self.cur.execute(sql , [(id)])
                 self.db.commit()
                 self.cur.close()
-                self.db.close()
                 self.statusBar().showMessage('Book Deleted')
 
                 self.comboBox_6.setCurrentIndex(0)
@@ -338,16 +333,15 @@ class MainApp(QMainWindow , ui):
             password1 = self.lineEdit_27.text()
 
             if password == password1:
-                self.db = sql.connect("library.db")
+                self.db = db
                 self.cur = self.db.cursor()
 
                 self.cur.execute('''
-                    INSERT INTO users(username,email,password) VALUES (%s,%s,%s)
+                    INSERT INTO users(username,email,password) VALUES (?,?,?)
                 ''' , (user_name,email,password))
 
                 self.db.commit()
                 self.cur.close()
-                self.db.close()
                 self.statusBar().showMessage('New User Addedd')
                 
                 self.lineEdit_9.setText('')
@@ -366,7 +360,7 @@ class MainApp(QMainWindow , ui):
             password = self.lineEdit_35.text()
 
             
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             sql = ''' SELECT * from users'''
@@ -374,7 +368,6 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
 
             for i in data:
                 if user_name == i[1] and password == i[3]:
@@ -402,16 +395,15 @@ class MainApp(QMainWindow , ui):
 
             if password == password1:
             
-                self.db = sql.connect("library.db")
+                self.db = db
                 self.cur = self.db.cursor()
 
                 self.cur.execute('''
-                    update users set username=%s,email=%s,password=%s where username=%s
+                    update users set username=?,email=?,password=? where username=?
                     ''' , (user_name,email,password,original_username))
 
                 self.db.commit()
                 self.cur.close()
-                self.db.close()
                 self.statusBar().showMessage('User Updated')
 
                 self.lineEdit_34.setText('')
@@ -432,16 +424,15 @@ class MainApp(QMainWindow , ui):
 
 
             
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
-                INSERT INTO clients(name,email,national_id) VALUES (%s,%s,%s)
+                INSERT INTO clients(name,email,national_id) VALUES (?,?,?)
             ''' , (name,email,national_id))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
             self.statusBar().showMessage('New Client Addedd ')
 
             self.lineEdit_2.setText('')
@@ -456,15 +447,14 @@ class MainApp(QMainWindow , ui):
         try:
             id = self.comboBox_7.currentData()
             
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
-            sql = ''' SELECT name,email,national_id from clients where id=%s '''
+            sql = ''' SELECT name,email,national_id from clients where id=? '''
             self.cur.execute(sql , [(id)])
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
     
             if data:
                 self.lineEdit_31.setText(data[0][0])
@@ -477,7 +467,7 @@ class MainApp(QMainWindow , ui):
 
     def show_client(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -485,7 +475,6 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
 
             if data:
                 self.tableWidget_6.setRowCount(0)
@@ -510,18 +499,18 @@ class MainApp(QMainWindow , ui):
             national_id = self.lineEdit_56.text()
 
             
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             print(name,email,type(national_id))
 
             self.cur.execute('''
-                update clients set name=%s,email=%s,national_id=%s where id=%s
+                update clients set name=?,email=?,national_id=? where id=?
                 ''' , (name,email,national_id,id))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
+
             self.statusBar().showMessage('Client Updated')
 
             self.comboBox_7.setCurrentIndex(0)
@@ -541,14 +530,13 @@ class MainApp(QMainWindow , ui):
             warning = QMessageBox.warning(self , 'Delete Client' , "Are you sure you want to delete this client" , 
             QMessageBox.Yes | QMessageBox.No)
             if warning == QMessageBox.Yes :
-                self.db = sql.connect("library.db")
+                self.db = db
                 self.cur = self.db.cursor()
 
-                sql = ''' DELETE from clients where id=%s '''
+                sql = ''' DELETE from clients where id=? '''
                 self.cur.execute(sql , [(id)])
                 self.db.commit()
                 self.cur.close()
-                self.db.close()
                 self.statusBar().showMessage('Client Deleted')
 
                 self.comboBox_7.setCurrentIndex(0)
@@ -565,16 +553,15 @@ class MainApp(QMainWindow , ui):
         try:
             category = self.lineEdit_55.text()
 
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
-                INSERT INTO categories (category) VALUES (%s)
+                INSERT INTO categories (category) VALUES (?)
             ''' , (category,))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
             self.statusBar().showMessage('New Category Addedd ')
 
             self.lineEdit_55.setText('')
@@ -584,7 +571,7 @@ class MainApp(QMainWindow , ui):
 
     def show_category(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -592,7 +579,6 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
 
             if data:
                 self.tableWidget_2.setRowCount(0)
@@ -614,16 +600,15 @@ class MainApp(QMainWindow , ui):
         try:
             author = self.lineEdit_58.text()
 
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
-                INSERT INTO authors (author) VALUES (%s)
+                INSERT INTO authors (author) VALUES (?)
             ''' , (author,))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
             self.statusBar().showMessage('New Author Addedd ')
 
             self.lineEdit_58.setText('')
@@ -634,7 +619,7 @@ class MainApp(QMainWindow , ui):
 
     def show_author(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -642,7 +627,6 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
 
             if data:
                 self.tableWidget_3.setRowCount(0)
@@ -663,16 +647,15 @@ class MainApp(QMainWindow , ui):
         try:
             publisher = self.lineEdit_59.text()
 
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
-                INSERT INTO publishers (publisher) VALUES (%s)
+                INSERT INTO publishers (publisher) VALUES (?)
             ''' , (publisher,))
 
             self.db.commit()
             self.cur.close()
-            self.db.close()
             self.statusBar().showMessage('New Publisher Addedd ')
 
             self.lineEdit_59.setText('')
@@ -682,7 +665,7 @@ class MainApp(QMainWindow , ui):
 
     def show_publisher(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -690,7 +673,6 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
 
             if data:
                 self.tableWidget_4.setRowCount(0)
@@ -708,7 +690,7 @@ class MainApp(QMainWindow , ui):
 
     def show_category_combobox(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -716,7 +698,7 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
+            
 
             if data:
                 self.comboBox_3.clear()
@@ -730,7 +712,7 @@ class MainApp(QMainWindow , ui):
 
     def show_author_combobox(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -738,7 +720,7 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
+            
 
             if data:
                 self.comboBox_4.clear()
@@ -751,7 +733,7 @@ class MainApp(QMainWindow , ui):
 
     def show_publisher_combobox(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -759,7 +741,7 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
+            
 
             if data:
                 self.comboBox_5.clear()
@@ -772,7 +754,7 @@ class MainApp(QMainWindow , ui):
 
     def show_title_combobox(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -780,7 +762,7 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
+            
 
             if data:
                 self.comboBox_6.clear()
@@ -794,7 +776,7 @@ class MainApp(QMainWindow , ui):
 
     def show_client_combobox(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -802,7 +784,7 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
+            
 
             if data:
                 self.comboBox_7.clear()
@@ -816,7 +798,7 @@ class MainApp(QMainWindow , ui):
 
     def show_book_combobox(self):
         try:
-            self.db = sql.connect("library.db")
+            self.db = db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -824,7 +806,7 @@ class MainApp(QMainWindow , ui):
 
             data = self.cur.fetchall()
             self.cur.close()
-            self.db.close()
+            
 
             if data:
                 self.comboBox_21.clear()
