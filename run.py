@@ -16,12 +16,22 @@ from app.daily_operation import *
 from app.settings import *
 from app.user import *
 
-os.system('python3 connection.py')
-os.system('python3 create_tables.py')
+
+os.system(resource_path('python3 connection.py'))
+os.system(resource_path('python3 create_tables.py'))
+
+import os, sys
+# Translate asset paths to useable format for PyInstaller
+def resource_path(relative_path):
+  if hasattr(sys, '_MEIPASS'):
+      return os.path.join(sys._MEIPASS, relative_path)
+  return os.path.join(os.path.abspath('.'), relative_path)
 
 
-ui,_ = loadUiType('library.ui')
-db = sql.connect("library.db")
+
+
+ui,_ = loadUiType(resource_path('library.ui'))
+db = sql.connect(resource_path("library.db"))
 
 class MainApp(QMainWindow , ui):
     def __init__(self):
