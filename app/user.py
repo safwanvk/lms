@@ -1,4 +1,4 @@
-import index
+import run
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -14,7 +14,7 @@ def add_new_user(self):
         password1 = self.lineEdit_27.text()
 
         if password == password1:
-            self.db = index.db
+            self.db = run.db
             self.cur = self.db.cursor()
 
             self.cur.execute('''
@@ -41,7 +41,7 @@ def login(self):
         password = self.lineEdit_35.text()
 
         
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         sql = ''' SELECT * from users'''
@@ -76,7 +76,7 @@ def edit_user(self):
 
         if password == password1:
         
-            self.db = index.db
+            self.db = run.db
             self.cur = self.db.cursor()
 
             self.cur.execute('''

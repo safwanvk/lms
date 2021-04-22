@@ -2,7 +2,7 @@ import datetime
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import index
+import run
 
 
 ######Day To Day#######
@@ -12,11 +12,11 @@ def day_operation(self):
         client_id = self.comboBox_22.currentData()
         book_id = self.comboBox_21.currentData()
         type = self.comboBox.currentText()
-        day = self.comboBox_2.currentIndex() + 1
+        day = self.comboBox_2.currentrun() + 1
         today =  datetime.date.today()
         to_date = today + datetime.timedelta(days=day)
         
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -27,10 +27,10 @@ def day_operation(self):
         self.cur.close()
         self.statusBar().showMessage('New operation Addedd')
 
-        self.comboBox_22.setCurrentIndex(0)
-        self.comboBox_21.setCurrentIndex(0)
-        self.comboBox.setCurrentIndex(0)
-        self.comboBox_2.setCurrentIndex(0)
+        self.comboBox_22.setCurrentrun(0)
+        self.comboBox_21.setCurrentrun(0)
+        self.comboBox.setCurrentrun(0)
+        self.comboBox_2.setCurrentrun(0)
 
         self.show_operations()
     except Exception:
@@ -39,7 +39,7 @@ def day_operation(self):
 
 def show_operations(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''

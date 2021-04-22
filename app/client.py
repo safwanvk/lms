@@ -1,4 +1,4 @@
-import index
+import run
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -12,7 +12,7 @@ def add_new_client(self):
 
 
         
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -35,7 +35,7 @@ def search_client(self):
     try:
         id = self.comboBox_7.currentData()
         
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         sql = ''' SELECT name,email,national_id from clients where id=? '''
@@ -55,7 +55,7 @@ def search_client(self):
 
 def show_client(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -87,7 +87,7 @@ def edit_client(self):
         national_id = self.lineEdit_56.text()
 
         
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         print(name,email,type(national_id))
@@ -101,7 +101,7 @@ def edit_client(self):
 
         self.statusBar().showMessage('Client Updated')
 
-        self.comboBox_7.setCurrentIndex(0)
+        self.comboBox_7.setCurrentrun(0)
         self.lineEdit_31.setText('')
         self.lineEdit_36.setText('')
         self.lineEdit_56.setText('')
@@ -127,7 +127,7 @@ def delete_client(self):
             self.cur.close()
             self.statusBar().showMessage('Client Deleted')
 
-            self.comboBox_7.setCurrentIndex(0)
+            self.comboBox_7.setCurrentrun(0)
             self.lineEdit_31.setText('')
             self.lineEdit_36.setText('')
             self.lineEdit_56.setText('')

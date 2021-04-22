@@ -2,11 +2,11 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import index
+import run
 
 def show_category_combobox(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -28,7 +28,7 @@ def show_category_combobox(self):
 
 def show_author_combobox(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -49,7 +49,7 @@ def show_author_combobox(self):
 
 def show_publisher_combobox(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -70,7 +70,7 @@ def show_publisher_combobox(self):
 
 def show_title_combobox(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -92,7 +92,7 @@ def show_title_combobox(self):
 
 def show_client_combobox(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -114,7 +114,7 @@ def show_client_combobox(self):
 
 def show_book_combobox(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''

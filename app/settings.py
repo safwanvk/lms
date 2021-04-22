@@ -2,14 +2,14 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import index
+import run
 
 #####settings#######
 def add_new_category(self):
     try:
         category = self.lineEdit_55.text()
 
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -27,7 +27,7 @@ def add_new_category(self):
 
 def show_category(self):
     try:
-        self.db =  index.db
+        self.db =  run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -56,7 +56,7 @@ def add_new_author(self):
     try:
         author = self.lineEdit_58.text()
 
-        self.db =  index.db
+        self.db =  run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -75,7 +75,7 @@ def add_new_author(self):
 
 def show_author(self):
     try:
-        self.db =  index.db
+        self.db =  run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -103,7 +103,7 @@ def add_new_publisher(self):
     try:
         publisher = self.lineEdit_59.text()
 
-        self.db =  index.db
+        self.db =  run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -121,7 +121,7 @@ def add_new_publisher(self):
 
 def show_publisher(self):
     try:
-        self.db =  index.db
+        self.db =  run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''

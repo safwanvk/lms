@@ -1,4 +1,4 @@
-import index
+import run
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -17,7 +17,7 @@ def add_new_book(self):
         price = self.lineEdit_19.text()
 
     
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -31,9 +31,9 @@ def add_new_book(self):
         self.lineEdit_20.setText('')
         self.plainTextEdit_6.setPlainText('')
         self.lineEdit_18.setText('')
-        self.comboBox_20.setCurrentIndex(0)
-        self.comboBox_19.setCurrentIndex(0)
-        self.comboBox_18.setCurrentIndex(0)
+        self.comboBox_20.setCurrentrun(0)
+        self.comboBox_19.setCurrentrun(0)
+        self.comboBox_18.setCurrentrun(0)
         self.lineEdit_19.setText('')
 
         self.show_books()
@@ -45,7 +45,7 @@ def add_new_book(self):
 
 def show_books(self):
     try:
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -76,7 +76,7 @@ def search_book(self):
     try:
         id = self.comboBox_6.currentData()
         
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         sql = ''' SELECT b.code,b.title,b.author,a.author as author_name,b.publisher,p.publisher as publisher_name,
@@ -115,7 +115,7 @@ def edit_book(self):
         price = self.lineEdit_6.text()
 
         
-        self.db = index.db
+        self.db = run.db
         self.cur = self.db.cursor()
 
         self.cur.execute('''
@@ -126,13 +126,13 @@ def edit_book(self):
         self.cur.close()
         self.statusBar().showMessage('Book Updated')
 
-        self.comboBox_6.setCurrentIndex(0)
+        self.comboBox_6.setCurrentrun(0)
         self.lineEdit_3.setText('')
         self.plainTextEdit.setPlainText('')
         self.lineEdit_5.setText('')
-        self.comboBox_3.setCurrentIndex(0)
-        self.comboBox_4.setCurrentIndex(0)
-        self.comboBox_5.setCurrentIndex(0)
+        self.comboBox_3.setCurrentrun(0)
+        self.comboBox_4.setCurrentrun(0)
+        self.comboBox_5.setCurrentrun(0)
         self.lineEdit_6.setText('')
 
         self.show_books()
@@ -148,7 +148,7 @@ def delete_book(self):
         QMessageBox.Yes | QMessageBox.No)
         if warning == QMessageBox.Yes :
 
-            self.db = index.db
+            self.db = run.db
             self.cur = self.db.cursor()
 
             sql = ''' DELETE from books where id=? '''
@@ -157,13 +157,13 @@ def delete_book(self):
             self.cur.close()
             self.statusBar().showMessage('Book Deleted')
 
-            self.comboBox_6.setCurrentIndex(0)
+            self.comboBox_6.setCurrentrun(0)
             self.lineEdit_3.setText('')
             self.plainTextEdit.setPlainText('')
             self.lineEdit_5.setText('')
-            self.comboBox_3.setCurrentIndex(0)
-            self.comboBox_4.setCurrentIndex(0)
-            self.comboBox_5.setCurrentIndex(0)
+            self.comboBox_3.setCurrentrun(0)
+            self.comboBox_4.setCurrentrun(0)
+            self.comboBox_5.setCurrentrun(0)
             self.lineEdit_6.setText('')
 
             self.show_books()
